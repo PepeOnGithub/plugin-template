@@ -1,3 +1,4 @@
+
 import { logger } from "@vendetta";
 import Settings from "./Settings";
 import { registerCommand } from "@vendetta/commands";
@@ -5,11 +6,10 @@ import { findByProps } from "@vendetta/metro";
 import { url } from "@vendetta/metro/common";
 import { ApplicationCommandType, ApplicationCommandInputType, ApplicationCommandOptionType } from "../../../ApplicationCommandTypes";
 
-const { sendMessage } = findByProps("sendMessage", "receiveMessage");
+const { sendMessage, receiveMessage } = findByProps("sendMessage", "receiveMessage");
 const { sendBotMessage } = findByProps("sendBotMessage");
 const APIUtils = findByProps("getAPIBaseURL", "get");
 let commands = [];
-
 const getRandomNumber = () => Math.floor(Math.random() * 100);
 
 const words = [
@@ -28,7 +28,7 @@ function randomWord(any) {
 }
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 const spamCommand = registerCommand({
@@ -80,7 +80,7 @@ export default {
     },
     onUnload: () => {
         logger.log("Goodbye, world.");
-        commands = commands.filter(cmd => cmd !== spamCommand);
+        commands.splice(commands.indexOf(spamCommand), 1);
     },
     settings: Settings,
 };
