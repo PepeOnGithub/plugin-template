@@ -1,16 +1,16 @@
-import { logger } from "@vendetta";
-import Settings from "./Settings";
 import { registerCommand, unregisterCommand } from "@vendetta/commands";
 import { findByProps } from "@vendetta/metro";
+import { showToast } from "@vendetta/ui/toasts";
+import { showConfirmationAlert } from "@vendetta/ui/alerts";
+import { logger } from "@vendetta";
+import Settings from "./Settings";
 import { ApplicationCommandType, ApplicationCommandInputType, ApplicationCommandOptionType } from "../../../ApplicationCommandTypes";
 import { getUser } from "@vendetta/api/users";
 
 const { sendMessage } = findByProps("sendMessage", "receiveMessage");
 const APIUtils = findByProps("getAPIBaseURL", "get");
-let commands = [];
 
 const getRandomNumber = () => Math.floor(Math.random() * 100);
-
 const words = [
     "### Get Raided LOL!",
     "### BOZO ASS SERVER!",
@@ -22,13 +22,15 @@ const words = [
     "### Skill Issue"
 ];
 
-function randomWord(any) {
-    return any[Math.floor(Math.random() * any.length)];
+function randomWord(list: string[]) {
+    return list[Math.floor(Math.random() * list.length)];
 }
 
-function sleep(ms) {
+function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const commands = [];
 
 const spamCommand = registerCommand({
     name: "spam",
@@ -61,10 +63,7 @@ const spamCommand = registerCommand({
         const sleepTime = args[1].value;
 
         for (let idx = 0; idx < amount; idx++) {
-            const rw = randomWord(words);
-            const rn = getRandomNumber();
-            const sym = "`";
-            const content = `${rw} ${sym} ${rn} ${sym}`;
+            const content = `${randomWord(words)} \`${getRandomNumber()}\``;
             await sleep(sleepTime);
             sendMessage(ctx.channel.id, { content });
         }
@@ -95,12 +94,19 @@ const avatarCommand = registerCommand({
             const user = await getUser(userId);
             if (!user) {
                 logger.log(`User with ID ${userId} not found.`);
+                showToast(`User with ID ${userId} not found.`);
                 return;
             }
             const avatarUrl = `${APIUtils.getAPIBaseURL()}/users/${user.id}/avatars/${user.avatar}.png`;
             sendMessage(ctx.channel.id, { content: `Avatar URL for ${user.username}: ${avatarUrl}` });
         } catch (error) {
             logger.error("Error fetching avatar:", error);
+            showConfirmationAlert({
+                title: "Error",
+                content: "Failed to fetch avatar. Please try again later.",
+                confirmText: "OK",
+                onConfirm: () => {},
+            });
         }
     },
 });
@@ -113,7 +119,7 @@ export default {
     onUnload: () => {
         logger.log("Goodbye, world.");
         commands.forEach(command => unregisterCommand(command.name));
-        commands = [];
+        commands.length = 0;
     },
     settings: Settings,
 };
