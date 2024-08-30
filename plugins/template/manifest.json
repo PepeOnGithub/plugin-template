@@ -7,7 +7,7 @@
             "id": "YOUR_ID_HERE"
         }
     ],
-    "main": "src/index.ts",
+    "main": "src/index.js",
     "vendetta": {
         "icon": "ic_badge_staff"
     }
