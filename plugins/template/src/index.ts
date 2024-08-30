@@ -27,7 +27,7 @@ return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 
-commands.push(registerCommand({
+this.onUnload = commands.registerCommand({
   name: "spam",
   displayName: "spam",
   description: "Spams any message",
