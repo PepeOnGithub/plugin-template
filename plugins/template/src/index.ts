@@ -1,5 +1,3 @@
-import { logger } from "@vendetta";
-import Settings from "./Settings";
 import { registerCommand } from "@vendetta/commands";
 import { findByProps } from "@vendetta/metro";
 
@@ -26,43 +24,33 @@ function sleep(ms: number | undefined) {
 return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+commands.push(
+registerCommand({
+name: "raid1",
+displayName: "raid1",
+description: "raid1",
+displayDescription: "Executes a raid!",
+options: [],
+// @ts-ignore
+applicationId: "-1",
+inputType: 1,
+type: 1,
 
-this.onUnload = commands.registerCommand({
-  name: "spam",
-  displayName: "spam",
-  description: "Spams any message",
-  displayDescription: "Spams any message",
-  options: [
-  {
-    name: "amount",
-    displayName: "amount",
-    description: "Enter the number of times to send the message.",
-    displayDescription: "Enter the number of times to send the message.",
-    required: true,
-    type: 4, 
-  },
-  {
-    name: "sleep",
-    displayName: "sleep",
-    description: "Enter the time delay between each message in milliseconds.",
-    displayDescription: "Enter the time delay between each message in milliseconds.",
-    required: true,
-    type: 4,
-  }],
-  applicationId: "-1",
-  inputType: 1,
-  type: 1,
-
-  execute: async (args, ctx) => {
-    const amount = args[0].value;
-    const sleepTime = args[1].value;
-
-    for (let idx = 0; idx < amount; idx++) {
-        const rw = randomWord(words);
+execute: async (args, ctx) => {
+  for (let idx = 0; idx < 5; idx++) {
+    const rn = getRandomNumber();
+    const rw = randomWord(words);
     const sym = "`"; // SYM is short for symbol
-      const content = `${rw} ${sym} ${rn} ${sym}`;
-      await sleep(idx * sleepTime);
-      MessageActions.sendMessage(ctx.channel.id, { content });
-    }
-  },
-}));
+    const content = `${rw} ${sym} ${rn} ${sym}`;
+    await sleep(idx * 1000);
+    MessageActions.sendMessage(ctx.channel.id, { content });
+  }
+}
+})
+);
+
+export const onUnload = () => {
+for (const unregisterCommand of commands) {
+unregisterCommand();
+}
+};
