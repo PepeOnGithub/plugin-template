@@ -9,7 +9,7 @@
   ],
   "main": "src/index.ts",
   "vendetta": {
-    "icon": "ic_badge_staff"
+     "icon": "ic_application_command_24px"
   },
   "hash": "6cb6594aa032b83a1f24c2bb3d63e8aeb8e1652e0361e7d7a0e415850cc9c406"
 }
