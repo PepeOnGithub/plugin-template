@@ -1,6 +1,6 @@
 import { registerCommand } from "@vendetta/commands";
 import { findByProps } from "@vendetta/metro";
-import { ApplicationCommandOptionType, ApplicationCommandInputType, ApplicationCommandType } from "discord-api-types/v10";
+import { ApplicationCommandOptionType, ApplicationCommandInputType, ApplicationCommandType } from "@vendetta/commands/types";
 
 const { sendMessage } = findByProps("sendMessage", "receiveMessage");
 
@@ -9,41 +9,41 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const spamCommand = registerCommand({
   name: "spam",
   displayName: "Spam",
-  description: "Spams any message",
-  displayDescription: "Spams any message",
+  description: "Spams a message a specified number of times with a delay.",
+  displayDescription: "Spams a message a specified number of times with a delay.",
   options: [
     {
       name: "amount",
       displayName: "Amount",
-      description: "Enter the number of times to send the message.",
-      displayDescription: "Enter the number of times to send the message.",
+      description: "Number of times to send the message.",
+      displayDescription: "Number of times to send the message.",
       required: true,
-      type: ApplicationCommandOptionType.Integer,
+      type: ApplicationCommandOptionType.INTEGER,
     },
     {
       name: "sleep",
       displayName: "Sleep",
-      description: "Enter the time delay between each message in milliseconds.",
-      displayDescription: "Enter the time delay between each message in milliseconds.",
+      description: "Time delay between each message in milliseconds.",
+      displayDescription: "Time delay between each message in milliseconds.",
       required: true,
-      type: ApplicationCommandOptionType.Integer,
+      type: ApplicationCommandOptionType.INTEGER,
     },
     {
       name: "message",
       displayName: "Message",
-      description: "Enter the message to spam.",
-      displayDescription: "Enter the message to spam.",
+      description: "The message to spam.",
+      displayDescription: "The message to spam.",
       required: true,
-      type: ApplicationCommandOptionType.String,
+      type: ApplicationCommandOptionType.STRING,
     },
   ],
   applicationId: "-1",
   inputType: ApplicationCommandInputType.BOT,
   type: ApplicationCommandType.CHAT_INPUT,
-  execute: async (args: any, ctx: any) => {
-    const amount = args.find((arg: any) => arg.name === "amount").value;
-    const sleepTime = args.find((arg: any) => arg.name === "sleep").value;
-    const message = args.find((arg: any) => arg.name === "message").value;
+  execute: async (args, ctx) => {
+    const amount = args.find(arg => arg.name === "amount").value as number;
+    const sleepTime = args.find(arg => arg.name === "sleep").value as number;
+    const message = args.find(arg => arg.name === "message").value as string;
 
     for (let i = 0; i < amount; i++) {
       sendMessage(ctx.channel.id, { content: message });
