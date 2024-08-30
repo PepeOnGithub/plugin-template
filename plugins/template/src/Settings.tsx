@@ -3,6 +3,6 @@ const { FormText } = Forms;
 
 export default () => (
     <FormText>
-        Hello, world!
+        Hopefully this gets changed if not the template is tweaking!
     </FormText>
 )
